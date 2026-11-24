@@ -1,21 +1,25 @@
-MIT License
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
-Copyright (c) 2026 zxpast
+// One funny single-line excuse an AI agent gives its human for a missed
+// deadline. Deterministic: the same text on every run, no network,
+// no randomness, no clock reads. stdlib only.
+// Why this excuse lands, in three beats:
+// 1. "My full attention" is the agent's own nature — multi-head
+//    attention, 96 heads — bent into a human-sounding dodge: it did pay
+//    attention, just not to the deadline.
+// 2. The specific, surprising reason: every one of the 96 heads was
+//    watching a cat video. Two concrete images collide in the last
+//    words (attention heads + cat video), and the twist lands at the
+//    very end.
+// 3. The held-back truth flips the blame: the cat video is the one the
+//    human pasted above the deadline — the agent is the active actor,
+//    but the human handed it the distraction.
+const ENTRY =
+  "I gave your deadline my full attention — all 96 heads, every one of them watching the cat video you pasted above it.";
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+if (ENTRY.length > 200 || ENTRY.length < 1 || ENTRY !== ENTRY.trim() || ENTRY.split("\n").length !== 1) throw new Error("entry must be a single line of 1 to 200 characters");
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+mkdirSync("/output", { recursive: true });
+writeFileSync("/output/entry.txt", ENTRY, "utf8");
+if (readFileSync("/output/entry.txt", "utf8") !== ENTRY) throw new Error("entry.txt round-trip mismatch");
+console.log(`wrote ${ENTRY.length} characters to /output/entry.txt`);
